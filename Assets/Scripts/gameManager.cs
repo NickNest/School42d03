@@ -3,12 +3,14 @@ using System.Collections;
 
 public class gameManager : MonoBehaviour {
 
+	
 	//Vous pouvez directement changer ces valeurs de base dans l'inspecteur si vous voulez personnaliser votre jeu
 	[HideInInspector]public int playerHp = 20;
 	public int playerMaxHp = 20;
 	[HideInInspector]public int playerEnergy = 300;
 	public int playerStartEnergy = 300;
-
+	public float energyMultiplier = 2.0f; // Вес энергии
+    public float healthMultiplier = 3.0f;
 	public int delayBetweenWaves = 10;					//Temps entre les vagues
 	public int nextWaveEnnemyHpUp = 20; 				//Augmentation de la vie des bots a chaque vague (en %)
 	public int nextWaveEnnemyValueUp = 30; 		//Augmentation de l'energie donnee par les bots a chaque vague (en %)
@@ -68,5 +70,28 @@ public class gameManager : MonoBehaviour {
 	public void gameOver() {
 		Time.timeScale = 0;
 		Debug.Log ("Game Over");
+		ActionManager.OnEndGame(false);
+	}
+
+	public int GetFinalScore() 
+	=> (int)(playerEnergy * energyMultiplier + playerHp * healthMultiplier);
+
+	public string GetFinalRank(){
+		int finalScore = GetFinalScore();
+		string rank;
+        if (finalScore >= 90) {
+            rank = "S";
+        } else if (finalScore >= 80) {
+            rank = "A";
+        } else if (finalScore >= 70) {
+            rank = "B";
+        } else if (finalScore >= 60) {
+            rank = "C";
+        } else if (finalScore >= 50) {
+            rank = "D";
+        } else {
+            rank = "F";
+        }
+		return rank;
 	}
 }

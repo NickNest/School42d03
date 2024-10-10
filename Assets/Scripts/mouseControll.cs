@@ -16,8 +16,13 @@ public class mouseControll : MonoBehaviour
     private Vector3 mouseWorldPosition;
     void Start()
     {
-        ActionManager.ChoosingTower += OnChoosingTower;
 
+    }
+    private void OnEnable() {
+        ActionManager.ChoosingTower += OnChoosingTower; 
+    }
+    private void OnDisable() {
+        ActionManager.ChoosingTower -= OnChoosingTower; 
     }
 
     void Update()
@@ -54,6 +59,7 @@ public class mouseControll : MonoBehaviour
 
     public void OnChoosingTower(GameObject choosingTurret)
     {
+        ActionManager.OnUnChoosingTower();
         _currentChoosingTurret = choosingTurret;
         _currentTurret = Instantiate(_currentChoosingTurret, transform.parent);
         _towerScript = _currentTurret.GetComponent <towerScript>();
