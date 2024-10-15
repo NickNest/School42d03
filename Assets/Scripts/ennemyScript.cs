@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class ennemyScript : MonoBehaviour {
 
@@ -12,18 +11,16 @@ public class ennemyScript : MonoBehaviour {
 	public bool isFlying = false;
 	public int score;
 	public int hp;
-	public int value;									//Energie gagnee en tuant l'ennemi
-	public int ennemyDamage;				//Dommages lorsque l'ennemi touche le core
-	public float spawnRate;						//Vitesse de spawn en secondes
-	public int waveLenghtModifier;		//Modificateur de taille de vague en %
+	public int value;					
+	public int ennemyDamage;				
+	public float spawnRate;		
+	public int waveLenghtModifier;
 
-	//Initialisation de la classe
 	void Start() {
 		lastPos = gameObject.transform.position;
 		score = hp;
 	}
 
-	//Boucle d'update de la classe
 	void Update() {
 		lookForward();
 		float step = speed * Time.deltaTime;
@@ -42,7 +39,6 @@ public class ennemyScript : MonoBehaviour {
 		}
 	}
 
-	//Permet a l'ennemi de regarder dans la direction ou il se deplace
 	void lookForward() {
 		Vector3 moveDirection = gameObject.transform.position - lastPos; 
 		if (moveDirection != Vector3.zero) {
@@ -52,14 +48,12 @@ public class ennemyScript : MonoBehaviour {
 		lastPos = gameObject.transform.position;
 	}
 
-	//Fonction appellee a la destruction d'un ennemi
 	void destruction(){
 		Instantiate(explosion, gameObject.transform.position, Quaternion.identity);
 		Destroy(gameObject);
 		checkLastEnemy();
 	}
 
-	//Fonction testant la destruction du dernier ennemi pour la victoire du niveau
 	void checkLastEnemy() {
 		if (gameManager.gm.lastWave == true) {
 			GameObject[] spawners = GameObject.FindGameObjectsWithTag("spawner");

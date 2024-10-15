@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -19,7 +17,8 @@ public class EndGameScript : MonoBehaviour
     }
 
     public void OnEndGame(bool isWinning) {
-        if(isWinning){
+        if(isWinning)
+        {
             int finalScore = gameManager.gm.GetFinalScore();
             string rank = gameManager.gm.GetFinalRank();
             _endTitleText.text = $"YOU WIN!\nYour score {finalScore}\nRank {rank}";
@@ -27,9 +26,15 @@ public class EndGameScript : MonoBehaviour
         _endTitleObj.SetActive(true);
     }
 
-    public void RestartScene(){
-        Scene currentScene = SceneManager.GetActiveScene();
+    public void NextLevel()
+    {
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex + 1);
+    }
 
+    public void RestartScene()
+    {
+        Scene currentScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(currentScene.name);
     }
 }

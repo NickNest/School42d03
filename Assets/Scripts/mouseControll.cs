@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 public class mouseControll : MonoBehaviour
 {
@@ -13,16 +9,24 @@ public class mouseControll : MonoBehaviour
     private towerScript _towerScript;
     private SpriteRenderer _towerRenderer;
 
+    private Camera mainCamera;
+
     private Vector3 mouseWorldPosition;
     void Start()
     {
+        mainCamera = Camera.main;
+    }
+    private void OnEnable()
+    {
+        ActionManager.ChoosingTower += OnChoosingTower;
+        ActionManager.UnChoosingTower += OnUnchoosingTower;
+    }
 
-    }
-    private void OnEnable() {
-        ActionManager.ChoosingTower += OnChoosingTower; 
-    }
-    private void OnDisable() {
-        ActionManager.ChoosingTower -= OnChoosingTower; 
+
+    private void OnDisable()
+    {
+        ActionManager.ChoosingTower -= OnChoosingTower;
+        ActionManager.UnChoosingTower -= OnUnchoosingTower;
     }
 
     void Update()
@@ -48,12 +52,22 @@ public class mouseControll : MonoBehaviour
                 ActionManager.OnPlacingTower(_currentTurret, mouseWorldPosition);
             }
         }
-
-        if (Input.GetMouseButtonDown(1) && _currentTurret != null)
+        if (Input.GetMouseButtonDown(1))
         {
-            Destroy(_currentTurret);
-            ActionManager.OnUnChoosingTower();
+            if (_currentTurret != null)
+            {
+                Destroy(_currentTurret);
+                ActionManager.OnUnChoosingTower();
+            }
 
+            Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+
+            if (hit.collider != null && hit.collider.gameObject.tag == "tower")
+            {
+                ActionManager.OnSelectingPlacedTower(hit.collider.gameObject);
+            }
+            else ActionManager.OnUnselectingPlacedTower();
         }
     }
 
@@ -62,7 +76,7 @@ public class mouseControll : MonoBehaviour
         ActionManager.OnUnChoosingTower();
         _currentChoosingTurret = choosingTurret;
         _currentTurret = Instantiate(_currentChoosingTurret, transform.parent);
-        _towerScript = _currentTurret.GetComponent <towerScript>();
+        _towerScript = _currentTurret.GetComponent<towerScript>();
         _towerRenderer = _currentTurret.GetComponent<SpriteRenderer>();
         Collider2D[] colliders = _currentTurret.GetComponentsInChildren<Collider2D>();
         foreach (Collider2D collider2d in colliders)
@@ -71,6 +85,14 @@ public class mouseControll : MonoBehaviour
         }
         _currentTurret.gameObject.GetComponent<towerScript>().isPlacing = false;
     }
+    private void OnUnchoosingTower()
+    {
+        if (_currentTurret != null)
+        {
+            Destroy(_currentTurret.gameObject);
+        }
+    }
+
 
 
 }

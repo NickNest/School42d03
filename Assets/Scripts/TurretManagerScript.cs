@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,21 +27,10 @@ public class TurretManagerScript : MonoBehaviour
         _textDamage.text = _damage.ToString();
         _textRange.text = _range.ToString();
         _textEnergy.text = _energy.ToString();
-
-        ActionManager.UnChoosingTower += OnUnChoosingTower;
-    }
-    void Update()
-    {
-
     }
 
     public void OnTurretClick()
     {
         ActionManager.OnChoosingTower(_turret);
-    }
-
-    public void OnUnChoosingTower()
-    {
-        
     }
 }

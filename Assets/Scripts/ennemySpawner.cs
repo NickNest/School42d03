@@ -1,10 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class ennemySpawner : MonoBehaviour {
 
-//	public enum Type{NANO, ROUND, ONE, TWO, FLY, BOSS}
-//	public Type type;
 	private int waveNumber = 0;
 	private float spawnRate;
 	private float nextSpawn = 0;
@@ -17,8 +14,6 @@ public class ennemySpawner : MonoBehaviour {
 	[HideInInspector]public GameObject playerCore;
 	[HideInInspector]public bool isEmpty = false;
 
-	//Pour les curieux une méthode beaucoup plus propre existe mais l'appliquer ici vous spoilerait les jours a venir. 
-	// J'utilise donc en attendant une bidouille moins jolie mais fonctionnelle.
 	void trySpawn() {
 		if (Time.time > nextSpawn && spawned <  waveLenght) {
 			GameObject newBot = (GameObject)Instantiate(toSpawn, transform.position, Quaternion.identity);
@@ -47,7 +42,6 @@ public class ennemySpawner : MonoBehaviour {
 		}
 	}
 
-	//Selection aleatoire du prochain type d'ennemi a spawner
 	void pickType() {
 		waveNumber += 1;
 		Debug.Log("Vague numero : " + waveNumber);
