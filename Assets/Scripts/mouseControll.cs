@@ -37,7 +37,8 @@ public class mouseControll : MonoBehaviour
         if (_currentTurret != null)
         {
             _currentTurret.transform.position = mouseWorldPosition;
-            if (_towerScript.energy <= gameManager.gm.playerEnergy)
+            if (_towerScript.energy <= gameManager.gm.playerEnergy &&
+                CanPlacing(mouseWorldPosition))
             {
                 _towerRenderer.color = Color.green;
             }
@@ -92,7 +93,12 @@ public class mouseControll : MonoBehaviour
             Destroy(_currentTurret.gameObject);
         }
     }
-
+    private bool CanPlacing(Vector3 mouseWorldPosition)
+    {
+        Vector2 point = mouseWorldPosition;
+        Collider2D collider = Physics2D.OverlapPoint(point);
+        return collider != null && collider.CompareTag("empty");
+    }
 
 
 }
